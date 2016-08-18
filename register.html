@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+	<script src="bower_components/angular/angular.js"></script> 
+	<script src="bower_components/angular-aria/angular-aria.js"></script> 
+	<script src="bower_components/angular-animate/angular-animate.js"></script> 
+	<script src="bower_components/angular-material/angular-material.js"></script> 
+	<script src="bower_components/angular-material-icons/angular-material-icons.min.js"></script> 
+	<style>
+	</style>
+	<script>
+
+ 
+		var app = angular.module( 'TILApp', [ 'ngMaterial', 'ngAnimate', 'ngMdIcons'] )
+			.controller("LoginController", [ '$scope', '$http', '$window', function($scope, $http, $window){
+				$scope.login = function(){
+				
+					$http({
+							method: 'POST',
+							url: 'register.php',
+							data: 'username=' + $scope.username + '&password=' + $scope.password,
+							headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+						})
+						.then(function (result) {
+						 if(result.data.response == 'success'){
+							$window.location = "/til";
+						 }
+							console.log('failed');
+						});
+				}
+			}]);
+			app.directive('myEnter', function () {
+				return function (scope, element, attrs) {
+					element.bind("keydown keypress", function (event) {
+						if(event.which === 13) {
+							scope.$apply(function (){
+								scope.$eval(attrs.myEnter);
+							});
+
+							event.preventDefault();
+						}
+					});
+				};
+			});
+	</script> 
+</head>
+<body ng-app="TILApp">
+ 
+<div ng-controller="LoginController">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h3>Today I Learned - Register</h3>
+		</div>
+	</md-toolbar>
+	<div layout="row">
+		<div flex-sm="0" flex-gt-sm="40"></div>
+		<div flex-gt-sm="20" flex-sm="100" flex-xs="100">
+		<h4>Login</h4>
+			<md-input-container class="md-block">
+			  <label>Username</label>
+			  <input type="text" ng-model="username" md-select-on-focus>
+			</md-input-container>
+			<md-input-container class="md-block">
+			  <label>Password</label>
+			  <input type="password" ng-model="password" md-select-on-focus>
+			</md-input-container>
+			<md-input-container class="md-block">
+			  <label>Confrim Password</label>
+			  <input type="password" ng-model="confirmpassword" md-select-on-focus my-enter="login()">
+			</md-input-container>
+			<md-button class="md-raised md-primary" ng-click="login()" >Create Account</md-button>
+		</div>
+		<div flex-sm="0" flex-gt-sm="40"></div>
+	</div>
+ </div>
+
+	
+ 
+</body>
+</html>
